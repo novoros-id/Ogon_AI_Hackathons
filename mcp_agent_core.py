@@ -110,7 +110,8 @@ class MCPAgent:
         prompt += '  "args": {...}\n'
         prompt += "}\n"
 
-        logger.debug(f"Сформированный промпт:\n{prompt}")
+        #logger.debug(f"Сформированный промпт:\n{prompt}")
+        print(promt)
         return prompt
 
     async def query_ollama(self, prompt: str) -> Optional[Dict[str, Any]]:
@@ -210,7 +211,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-@app.post("/query", response_model=AgentResponse)
+@app.post("/query", response_model=AgentResponse, timeout=20.0)
 async def handle_query(request: UserQueryRequest):
     return await agent.process_query(request.user_input)
 
