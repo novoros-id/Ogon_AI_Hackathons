@@ -157,14 +157,40 @@ class MCPAgent:
             return AgentResponse(reply=f"Неизвестный инструмент: {tool_name}")
 
         tool = self.tools_map[tool_name]
-        server_name = next(name for name, conf in MCP_SERVERS_CONFIG.items()
-                           if conf["url"] == tool.server_url)
+        server_url = getattr(tool, "server_url", None)
 
-        client = self.mcp_clients[server_name]
+        if not server_url:
+            logger.warning(f"No server URL found for tool {tool_name}")
+            return AgentResponse(reply="Ошибка: сервер не найден")
+
+        # Ищем имя сервера по URL
+        server_name = None
+        for name, conf in MCP_SERVERS_CONFIG.items():
+            if conf["url"] == server_url:
+                server_name = name
+                break
+
+        if not server_name:
+            return AgentResponse(reply="Ошибка: конфигурация сервера не найдена")
+
+        # Создаём новый клиент для этого вызова
+        server_config = MCP_SERVERS_CONFIG[server_name]
+
+        config = {
+            "mcpServers": {
+                server_name: {
+                    "url": server_config["url"],
+                    "transport": server_config["transport"]
+                }
+            }
+        }
+
+        client = Client(config)
 
         try:
-            result = await client.call_tool(tool_name, args)
-            reply = extract_text_content(result)
+            async with client:
+                result = await client.call_tool(tool_name, args)
+                reply = extract_text_content(result)
         except Exception as e:
             logger.error(f"Ошибка при вызове инструмента: {e}", exc_info=True)
             reply = f"Ошибка при вызове инструмента: {str(e)}"
