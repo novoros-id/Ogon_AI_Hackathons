@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: FastAPI (uvicorn)",
+      "type": "python",
+      "request": "launch",
+      "command": ["uvicorn", "mcp_agent_core:app", "--host", "0.0.0.0", "--port", "8000"],
+      "useAttachLauncher": false,
+      "console": "integratedTerminal",
+      "environment": [
+        {
+          "name": "LOG_LEVEL",
+          "value": "DEBUG"
+        }
+      ],
+      "logToFile": true,
+      "redirectOutput": true
+    },
+    {
+      "name": "Python: Telegram Bot",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/telegram_bot.py",
+      "console": "integratedTerminal",
+      "args": []
+    },
+    {
+      "name": "Python: Test Client Script",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/test_client.py",
+      "console": "integratedTerminal"
+    }
+  ]
+}
