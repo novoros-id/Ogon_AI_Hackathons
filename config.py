@@ -11,6 +11,10 @@ MCP_SERVERS_CONFIG = {
     "qa": {
         "url": "http://localhost:3335/mcp",
         "transport": "streamable-http"
+    },
+    "time": {
+        "url": "http://localhost:3336/mcp",
+        "transport": "streamable-http"
     }
 }
 
