@@ -92,7 +92,7 @@ class MCPAgent:
 
     def build_prompt_for_llm(self, user_input: str) -> str:
         """Формирует промпт для LLM с описанием инструментов"""
-        prompt = "Ты помощник, который должен выбрать подходящий инструмент.\n"
+        prompt = "Ты помощник, который должен выбрать подходящий инструмент. При выборе инструмента обращай внимание на описание\n"
         prompt += "Доступные инструменты:\n\n"
 
         for i, (name, tool) in enumerate(self.tools_map.items(), start=1):
@@ -135,7 +135,7 @@ class MCPAgent:
                         try:
                             return json.loads(last_line["response"])
                         except json.JSONDecodeError:
-                            logger.warning("LLM вернул текст вместо JSON")
+                            #logger.warning("LLM вернул текст вместо JSON")
                             return {"response": last_line["response"]}
                     else:
                         logger.error(f"Ollama API error: {res.status} — {await res.text()}")
@@ -176,6 +176,8 @@ class MCPAgent:
 
         prompt = self.build_prompt_for_llm(user_input)
         decision = await self.query_ollama(prompt)
+
+        print(f"[DEBUG] LLM выбор mcp сервера: {decision}")
 
         if not decision or "function" not in decision:
             return AgentResponse(reply="Не удалось определить действие")

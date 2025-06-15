@@ -38,7 +38,7 @@ dp = Dispatcher()
 )
 async def send_to_agent(user_input: str) -> dict:
     """Отправляет запрос в MCP-агент с retry и таймаутами"""
-    async with httpx.AsyncClient(timeout=20.0) as client:
+    async with httpx.AsyncClient(timeout=90.0) as client:
         logger.debug(f"Sending to agent: {user_input}")
         response = await client.post(AGENT_API_URL, json={"user_input": user_input})
         response.raise_for_status()
@@ -63,7 +63,7 @@ async def handle_message(message: Message):
         logger.error(f"Неизвестная ошибка: {e}", exc_info=True)
         reply_text = "Произошла внутренняя ошибка"
 
-    await message.reply(hcode(reply_text))
+    await message.reply(reply_text)
 
 
 async def main():
