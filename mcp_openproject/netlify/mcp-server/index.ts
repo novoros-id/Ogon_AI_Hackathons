@@ -152,7 +152,7 @@ export const setupMCPServer = (): McpServer => {
 
   server.tool(
     "openproject-create-project",
-    "Creates a new project in OpenProject",
+    "Создает новый проект в программе OpenProject",
     {
       name: z.string().describe("Name of the project"),
       identifier: z.string().describe("Identifier of the project (unique)"),
@@ -201,7 +201,7 @@ export const setupMCPServer = (): McpServer => {
 
   server.tool(
     "openproject-create-task",
-    "Creates a new task (work package) in an OpenProject project",
+    "Создает новую задачу в программе OpenProject",
     {
       projectId: z.string().describe("The ID or identifier of the project to add the task to"),
       subject: z.string().describe("Subject/title of the task"),
@@ -259,7 +259,7 @@ export const setupMCPServer = (): McpServer => {
 
   server.tool(
     "openproject-get-project",
-    "Gets a specific project by its ID from OpenProject",
+    "Получает данные проекта по ID из программы OpenProject",
     {
       projectId: z.string().describe("The ID of the project to retrieve"),
     },
@@ -295,7 +295,7 @@ export const setupMCPServer = (): McpServer => {
 
   server.tool(
     "openproject-list-projects",
-    "Lists all projects in OpenProject",
+    "Получает список проектов в программе OpenProject",
     { // No parameters for now, could add pagination/filters later
       pageSize: z.number().optional().describe("Number of projects per page"),
       offset: z.number().optional().describe("Page number to retrieve (1-indexed)")
@@ -336,7 +336,7 @@ export const setupMCPServer = (): McpServer => {
 
   server.tool(
     "openproject-get-task",
-    "Gets a specific task (work package) by its ID from OpenProject",
+    "Получает данные задачи по ID из программы OpenProject",
     {
       taskId: z.string().describe("The ID of the task to retrieve"),
     },
@@ -372,7 +372,7 @@ export const setupMCPServer = (): McpServer => {
 
   server.tool(
     "openproject-list-tasks",
-    "Lists tasks (work packages) in OpenProject, optionally filtered by project ID",
+    "Получает список задач из программы OpenProject, можно отсорировать по ID",
     {
       projectId: z.string().optional().describe("Optional ID of the project to filter tasks by"),
       pageSize: z.number().optional().describe("Number of tasks per page"),
@@ -424,7 +424,7 @@ export const setupMCPServer = (): McpServer => {
 
   server.tool(
     "openproject-update-project",
-    "Updates an existing project in OpenProject. Only include fields to be changed.",
+    "Изменяет проект в программе OpenProject. Необходимо перечислить поля которые надо изменить",
     {
       projectId: z.string().describe("The ID of the project to update"),
       name: z.string().optional().describe("New name for the project"),
@@ -476,7 +476,7 @@ export const setupMCPServer = (): McpServer => {
 
   server.tool(
     "openproject-update-task",
-    "Updates an existing task (work package) in OpenProject. Only include fields to be changed.",
+    "Изменяет задачу в программе OpenProject. Необходимо перечислить поля которые надо изменить.",
     {
       taskId: z.string().describe("The ID of the task to update"),
       lockVersion: z.number().describe("The lockVersion of the task (obtained from a GET request)"),
@@ -536,7 +536,7 @@ export const setupMCPServer = (): McpServer => {
 
   server.tool(
     "openproject-delete-project",
-    "Deletes a project from OpenProject. This action is irreversible.",
+    "Удаляет проект из программы OpenProject.",
     {
       projectId: z.string().describe("The ID of the project to delete"),
     },
@@ -579,7 +579,7 @@ export const setupMCPServer = (): McpServer => {
 
   server.tool(
     "openproject-delete-task",
-    "Deletes a task (work package) from OpenProject. This action is irreversible.",
+    "Удаляет задачу из программы OpenProject.",
     {
       taskId: z.string().describe("The ID of the task to delete"),
     },

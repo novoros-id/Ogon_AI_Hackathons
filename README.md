@@ -12,6 +12,7 @@ Ogon.AI Hackathons
 - qa_server.py Сервер mcp для получения произвольных ответов от Ollama. Старт python qa_server.py
 - time_server.py Сервер mcp для получения текущего времени. Старт python time_server.py
 - папка mcp_openproject. MCP сервер OpenProject- для запуска воспользоваться инструкцией https://github.com/jessebautista/mcp-openproject?ysclid=mbp5d3z8g6142178764
+Для запуска сервера MCP OPENPROJECT зайти в папку и запустить netlify dev
 - telegram_bot.py телеграм бот для обращения к хосту mpc
 - mcp_agent_core.py - хост (ядро) mcp 
 Для старта - uvicorn mcp_agent_core:app --host 0.0.0.0 --port 8000

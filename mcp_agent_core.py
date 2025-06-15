@@ -113,9 +113,8 @@ class MCPAgent:
         #logger.debug(f"Сформированный промпт:\n{prompt}")
         print(prompt)
         return prompt
-
     async def query_ollama(self, prompt: str) -> Optional[Dict[str, Any]]:
-        """Вызывает Ollama API для выбора инструмента"""
+        """Вызывает Ollama API для получения JSON-ответа"""
         import aiohttp
 
         payload = {
@@ -125,18 +124,48 @@ class MCPAgent:
         }
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(OLLAMA_API_URL, json=payload) as res:
-                if res.status == 200:
-                    data = await res.text()
-                    lines = data.strip().split('\n')
-                    last_line = json.loads(lines[-1])
-                    try:
-                        return json.loads(last_line["response"])
-                    except KeyError:
+            try:
+                async with session.post(OLLAMA_API_URL, json=payload) as res:
+                    if res.status == 200:
+                        data = await res.text()
+                        lines = data.strip().split('\n')
+                        last_line = json.loads(lines[-1])
+                        
+                        # Проверяем, является ли "response" валидным JSON
+                        try:
+                            return json.loads(last_line["response"])
+                        except json.JSONDecodeError:
+                            logger.warning("LLM вернул текст вместо JSON")
+                            return {"response": last_line["response"]}
+                    else:
+                        logger.error(f"Ollama API error: {res.status} — {await res.text()}")
                         return None
-                else:
-                    logger.error(f"Ollama API error: {res.status} — {await res.text()}")
-                    return None
+            except Exception as e:
+                logger.error(f"Ошибка при обращении к Ollama: {e}", exc_info=True)
+                return None
+    # async def query_ollama(self, prompt: str) -> Optional[Dict[str, Any]]:
+    #     """Вызывает Ollama API для выбора инструмента"""
+    #     import aiohttp
+
+    #     payload = {
+    #         "model": "llama3",
+    #         "prompt": prompt,
+    #         "stream": False
+    #     }
+
+    #     async with aiohttp.ClientSession() as session:
+    #         async with session.post(OLLAMA_API_URL, json=payload) as res:
+    #             if res.status == 200:
+    #                 data = await res.text()
+    #                 lines = data.strip().split('\n')
+    #                 last_line = json.loads(lines[-1])
+    #                 try:
+    #                     return json.loads(last_line["response"])
+    #                 except KeyError:
+    #                     return None
+    #             else:
+    #                 logger.error(f"Ollama API error: {res.status} — {await res.text()}")
+    #                 return None
 
     async def process_query(self, user_input: str) -> AgentResponse:
         """Основной метод обработки запроса от пользователя"""
@@ -192,11 +221,29 @@ class MCPAgent:
             async with client:
                 result = await client.call_tool(tool_name, args)
                 # Логируем полный ответ от сервера
-                print(f"[DEBUG] Raw MCP response: {result}")
+                #print(f"[DEBUG] Raw MCP response: {result}")
                 #logger.debug(f"Raw MCP response for {tool_name}: {result}")
 
                 reply = extract_text_content(result)
                 print(f"[DEBUG] extract_text_content: {reply}")
+
+                rag_prompt = f"""
+                Пользователь спросил: "{user_input}"
+
+                Вот данные, полученные от MCP-инструмента:
+                {reply}
+
+                В полученных данных MCP-инструмента найди ответ на вопрос и сделай человекочитаемый вывод только на русском языке.
+                """
+                #logger.debug(f"RAG-промпт для LLM:\n{rag_prompt}")
+                print(f"[DEBUG] RAG-промпт для LLM: {rag_prompt}")
+                rag_response = await self.query_ollama(rag_prompt)
+                print(f"[DEBUG] RAG-ответ от LLM: {rag_response}")
+
+                reply = rag_response.get("response", "Не могу интерпретировать данные") \
+                    if isinstance(rag_response, dict) else "LLM не вернул текстовый ответ"
+
+
         except Exception as e:
             logger.error(f"Ошибка при вызове инструмента: {e}", exc_info=True)
             reply = f"Ошибка при вызове инструмента: {str(e)}"

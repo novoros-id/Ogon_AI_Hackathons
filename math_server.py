@@ -4,7 +4,7 @@ from fastmcp import FastMCP
 mcp = FastMCP("Math Server", port=3334)
 @mcp.tool(
     name="add_numbers",
-    description="Складывает два числа"
+    description="Если необходимо сложить два числа"
     )
 def add_numbers(a: float, b: float) -> float:
     """
