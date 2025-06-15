@@ -15,6 +15,10 @@ MCP_SERVERS_CONFIG = {
     "time": {
         "url": "http://localhost:3336/mcp",
         "transport": "streamable-http"
+    },
+    "open_project": {
+        "url": "http://localhost:8888/mcp",
+        "transport": "streamable-http"
     }
 }
 

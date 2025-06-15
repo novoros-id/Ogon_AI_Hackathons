@@ -4,12 +4,12 @@ import json
 
 config = {
         "mcpServers": {
-            "math": {
-                "url": "http://localhost:3334/mcp",
-                "transport": "streamable-http"
+        "local": {
+            "url": "http://localhost:8888/mcp",
+            "transport": "streamable-http"
+                }
             }
         }
-    }
 
 client = Client(config)
 

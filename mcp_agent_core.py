@@ -191,7 +191,12 @@ class MCPAgent:
         try:
             async with client:
                 result = await client.call_tool(tool_name, args)
+                # Логируем полный ответ от сервера
+                print(f"[DEBUG] Raw MCP response: {result}")
+                #logger.debug(f"Raw MCP response for {tool_name}: {result}")
+
                 reply = extract_text_content(result)
+                print(f"[DEBUG] extract_text_content: {reply}")
         except Exception as e:
             logger.error(f"Ошибка при вызове инструмента: {e}", exc_info=True)
             reply = f"Ошибка при вызове инструмента: {str(e)}"
