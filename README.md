@@ -6,7 +6,7 @@
 
 *Название проекта – **Помощник менеджера проектов**
 
-*Ссылка на рабочее приложение – **https://t.me/vgn_io_test_bot** (если вдруг бот не отвечает, сообщите пожалуйста https://t.me/a_vgn_peston так как все вертится на домашнем компьютере)
+*Ссылка на рабочее приложение – **https://t.me/vgn_io_test_bot** (хостинг медленный, бот отвечает очень долго (4-5 минут),если вдруг бот не отвечает, сообщите пожалуйста https://t.me/a_vgn_peston так как все вертится на домашнем компьютере)
 
 *Ссылка на presentation.pdf - **https://docs.google.com/presentation/d/1XjFjO2hjHO3T-s3dLO7st0HcCiXobTvpBOQD0WbbkvU/edit?usp=sharing**
 
